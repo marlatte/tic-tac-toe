@@ -13,61 +13,175 @@ gameBoard:
 		Setting value
 	Mark a square for the current player if it's open.
 	Export:
-		markSquare, getBoard
+		markSquare, getGrid
 
 
 gameController
 	Create 2 players with names and tokens (1 and 2).
 	Get the board
 	On user input, play a round:
-		Mark a square
+		Mark a square on the board
 		Switch active player
 		Check for a winner
 			Tie = full board
 			Winner = 3 in a row/column/diagonal
 	Export:
-		playRound, getBoard, getActivePlayer
+		playRound, getBoard, getCurrentPlayer
 
 displayController
+	Select DOM elements.
+	Update the screen
+		Clear the board.
+		Get the latest game board.
+		Loop through the board and create buttons for each square
+	Event handler
+		playRound(relevant info)
+		Update screen
+	Event Listener
+		Trigger event handler
+
 
 
 
 
 */
 
+function gameBoard() {
+	// Generate a 3x3 grid.
+	const grid = [];
+	for (let i = 0; i < 3; i++) {
+		grid[i] = [];
+		for (let j = 0; j < 3; j++) {
+			grid[i].push(Square());
+		}
+	}
 
-{
-// -------------------------------------------------------------------------------- //
-// ---------------------------     Variables    ----------------------------------- //
-// -------------------------------------------------------------------------------- //
+	function Square() {
+		let value = 0;
+		const getValue = () => value;
+		const setValue = (player) => {
+			value = player;
+			return true;
+		};
+		return { getValue, setValue }
+	}
 
+	const getGrid = () => grid;
 
-// -- Behind the Scenes -- //
+	// Mark a square for the current player if it's open.
+	function markSquare(row, column, playerMarker) {
+		const square = grid[row][column];
+		return square.getValue() === 0 ? square.setValue(playerMarker) : false;
+	}
 
+	// Console version: Printing the grid
+	function getGridValues() {
+		return grid.map(row => row.map(square => square.getValue()));
+	}
 
-// -- On-Screen Stuff -- //
-
-
-// -------------------------------------------------------------------------------- //
-// ----------------------     Functions & Methods    ------------------------------ //
-// -------------------------------------------------------------------------------- //
-
-
-// -- Behind the Scenes -- //
-
-
-// -- On-Screen Stuff -- //
-
-
-// -------------------------------------------------------------------------------- //
-// --------------------     Calls & Event Listeners    ---------------------------- //
-// -------------------------------------------------------------------------------- //
-
-
-// -- Behind the Scenes -- //
-
-
-// -- On-Screen Stuff -- //
-
-
+	return { markSquare, getGrid, getGridValues }
 }
+
+function gameController() {
+	const PlayerFactory = (number) => {
+		const name = `Player ${number}`;
+		const marker = number;
+		const getName = () => name;
+		const getMarker = () => marker;
+		return { getName, getMarker }
+	}
+
+	const player1 = PlayerFactory(1);
+	const player2 = PlayerFactory(2);
+
+	let currentPlayer = player1;
+	const getCurrentPlayer = () => currentPlayer;
+
+	function switchPlayer() {
+		currentPlayer = currentPlayer === player1 ? player2 : player1;
+	}
+
+	function printNextRound() {
+		console.log(board.getGridValues());
+		console.log(`${currentPlayer.getName()}'s turn...`)
+
+	}
+
+	const board = gameBoard();
+
+	function playRound(inputRow, inputColumn) {
+		console.log(
+			`Marking square Row ${inputRow}, Column ${inputColumn} for ${currentPlayer.getName()}...`
+		);
+
+		// Mark a square on the board, checking if the position is open.
+		const positionOpen = board.markSquare(inputRow, inputColumn, currentPlayer.getMarker());
+		if (!positionOpen) {
+			console.log(`!!! Position already taken, try again ${currentPlayer.getName()} !!!`);
+			return printNextRound();
+		}
+
+		const grid = board.getGridValues();
+
+		// Check for a winner
+		function checkGameOver() {
+			// 	Winner = 3 in a row/column/diagonal
+			for (let y = 0; y < 3; y++) {
+				for (let x = 0; x < 3; x++) {
+					// Find first token
+					if (grid[y][x] === currentPlayer.getMarker()) {
+						// Check wins: horizontal, vertical, diagonal right, diagonal left
+						if (y === 0 && x === 0 &&
+							grid[y][x] === grid[y + 1][x + 1] &&
+							grid[y][x] === grid[y + 2][x + 2]) {
+							return { type: "Win", winPattern: "diagonally, top L to bottom R" };
+						} else if (y === 0 && x === 2 &&
+							grid[y][x] === grid[y + 1][x - 1] &&
+							grid[y][x] === grid[y + 2][x - 2]) {
+							return { type: "Win", winPattern: "diagonally, top R to bottom L" };
+						} else if (y === 0 &&
+							grid[y][x] === grid[y + 1][x] &&
+							grid[y][x] === grid[y + 2][x]) {
+							return { type: "Win", winPattern: "vertically" };
+						} else if (x === 0 &&
+							grid[y][x] === grid[y][x + 1] &&
+							grid[y][x] === grid[y][x + 2]) {
+							return { type: "Win", winPattern: "horizontally" };
+						}
+					}
+				}
+			}
+
+			// 	Tie = full board
+			if (!grid.some(row => row.some(square => square === 0))) {
+				console.log("Tie");
+				return { type: "tie", winPattern: "" }
+			} else return;
+		}
+
+		function endGame(gameDetails) {
+			console.log(board.getGridValues());
+			console.log(
+				`Game Over: ${gameDetails.type === "tie" ? "Tie" : `${currentPlayer.getName()} wins ${gameDetails.winPattern}`}.`
+			);
+
+		}
+
+		// Check whether to play next round
+		const gameDetails = checkGameOver()
+		if (!!gameDetails) {
+			endGame(gameDetails);
+		} else {
+			switchPlayer();
+			printNextRound();
+		}
+	}
+
+	// Starting game info
+	printNextRound();
+
+	return { playRound, getGrid: board.getGrid, getCurrentPlayer }
+}
+
+console.log("Hi there");
+const game = gameController();
