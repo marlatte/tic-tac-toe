@@ -1,7 +1,3 @@
-// -------------------------------------------------------------------------------- //
-// ----------------------------     Pseudo     ------------------------------------ //
-// -------------------------------------------------------------------------------- //
-
 /*
 
 Logical flow:
@@ -174,7 +170,23 @@ function gameController() {
 		} else {
 			switchPlayer();
 			printNextRound();
+			if (currentPlayer.getMarker() === 2) {
+				const computerChoice = computerPlays();
+				playRound(computerChoice[0], computerChoice[1]);
+			}
 		}
+	}
+
+	// Computer's turn
+	function computerPlays() {
+		let openPositions = [];
+		for (let y = 0; y < 3; y++) {
+			for (let x = 0; x < 3; x++) {
+				if (board.getGridValues()[y][x] === 0) openPositions.push([y, x]);
+			}
+		}
+		console.log(openPositions);
+		return openPositions[Math.floor(Math.random() * openPositions.length)]
 	}
 
 	// Starting game info
