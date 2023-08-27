@@ -4,16 +4,24 @@
 
 /*
 
-User story:
-As a < type of user >, I want < some goal > so that < some reason >
-
 Logical flow:
-A few sentences on general functionality and the steps necessary to do all those things.
+-------------
+gameBoard:
+	Generate a 3x3 grid.
+	Add an obj to each cell with methods for adding a player token and checking if it's empty.
+
+gameController
+	Create 2 players with names and tokens (1 and 2).
+
+displayController
+
+
+
 
 */
 
 
-
+{
 // -------------------------------------------------------------------------------- //
 // ---------------------------     Variables    ----------------------------------- //
 // -------------------------------------------------------------------------------- //
@@ -47,3 +55,4 @@ A few sentences on general functionality and the steps necessary to do all those
 // -- On-Screen Stuff -- //
 
 
+}
