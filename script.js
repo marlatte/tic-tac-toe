@@ -195,5 +195,9 @@ function gameController() {
 	return { playRound, getGrid: board.getGrid, getCurrentPlayer }
 }
 
-console.log("Hi there");
-const game = gameController();
+const screenController = (() => {
+	console.log("Hi there");
+	const game = gameController();
+	currentPlayerDisplay = document.querySelector(".current-player");
+	boardDisplay = document.querySelector(".game-board");
+})();

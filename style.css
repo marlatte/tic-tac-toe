@@ -1,6 +1,8 @@
 /* ---------------     Reboot     --------------- */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -10,8 +12,17 @@
 /* ---------------     /Reboot     --------------- */
 /* ---------------     Utilities & Universals     --------------- */
 
-:root{
+:root {
 	--eg-var: red;
+}
+
+body {
+	min-height: 100lvh;
+
+	display: flex;
+	flex-direction: column;
+
+	background-color: antiquewhite;
 }
 
 /* ---------------     /Utilities & Universals     --------------- */
@@ -19,6 +30,11 @@
 
 
 /* ---------------     Header     --------------- */
+
+header {
+	margin: 10px;
+}
+
 /* ---------------     /Header     --------------- */
 
 /* ---------------     Main     --------------- */
@@ -27,6 +43,39 @@
 /* ---------------     /Main     --------------- */
 
 /* ---------------     Footer     --------------- */
+
+footer {
+	margin: auto 0 15px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+
+	text-align: center;
+	font-size: 22px;
+}
+
+#my-name {
+	font-weight: bold;
+}
+
+a {
+	text-decoration: none;
+	color: unset;
+}
+
+.fa.fa-github {
+	color: currentColor;
+	font-size: 34px;
+}
+
+.fa-github:hover {
+	color: currentColor;
+	transition: transform 0.4s ease-in-out;
+	transform: rotate(-360deg) scale(1.3);
+}
+
 /* ---------------     /Footer     --------------- */
 
 
