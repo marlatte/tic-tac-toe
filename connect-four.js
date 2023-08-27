@@ -116,7 +116,6 @@ function GameController(
 
 	const playRound = (column) => {
 		// Drop a token for the current player
-		const activePlayer = getActivePlayer();
 		console.log(
 			`Dropping ${activePlayer.name}'s token into column ${column}...`
 		);
