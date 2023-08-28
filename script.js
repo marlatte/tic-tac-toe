@@ -198,6 +198,42 @@ function gameController() {
 const screenController = (() => {
 	console.log("Hi there");
 	const game = gameController();
-	currentPlayerDisplay = document.querySelector(".current-player");
-	boardDisplay = document.querySelector(".game-board");
+
+	const currentPlayerDisplay = document.querySelector(".current-player");
+	const boardDisplay = document.querySelector(".game-board");
+
+	function updateBoard() {
+		// Clear the board.
+		boardDisplay.textContent = "";
+		
+		// Get the latest game board.
+		grid = game.getGrid();
+		
+		// Loop through the board and create buttons for each square
+		grid.forEach((row, y) => {
+			row.forEach((square, x) => {
+				const squareBtn = document.createElement("button");
+				squareBtn.classList.add("square");
+				
+				squareBtn.dataset.column = x;
+				squareBtn.dataset.row = y;
+
+				let marker = square.getValue();
+				squareBtn.textContent = marker === 0 ? "" : marker === 1 ? "X" : "O";
+				boardDisplay.appendChild(squareBtn);
+			});
+		});
+	}
+
+	function handleClick(e) {
+		const inputRow = e.target.dataset.row;
+		const inputColumn = e.target.dataset.column;
+		if (!inputRow) return;
+		game.playRound(inputRow, inputColumn);
+		updateBoard()
+	}
+
+	boardDisplay.addEventListener("click", handleClick)
+
+	updateBoard();
 })();

@@ -9,6 +9,12 @@
 	/* color: unset; */
 }
 
+button {
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
 /* ---------------     /Reboot     --------------- */
 /* ---------------     Utilities & Universals     --------------- */
 
@@ -38,8 +44,47 @@ header {
 /* ---------------     /Header     --------------- */
 
 /* ---------------     Main     --------------- */
-/* ---------------     Section     --------------- */
-/* ---------------     /Section     --------------- */
+
+main {
+	padding: 20px;
+
+	display: flex;
+	flex-direction: column;
+}
+
+/* ---------------     Player Info     --------------- */
+
+/* ---------------     /Player Info     --------------- */
+
+/* ---------------     Board     --------------- */
+
+.board-container {
+	align-self: center;
+	padding: 5%;
+	
+	background-color: white;
+	border: 1px solid black;
+}
+
+.game-board {
+	--grid-dimensions: 80vw;
+
+	height: var(--grid-dimensions);
+	width: var(--grid-dimensions);
+
+	display: grid;
+	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(3, 1fr);
+	gap: 2%;
+
+	background-color: black;
+}
+
+.square {
+	background-color: #fff;
+}
+
+/* ---------------     /Board     --------------- */
 /* ---------------     /Main     --------------- */
 
 /* ---------------     Footer     --------------- */
