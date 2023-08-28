@@ -15,26 +15,33 @@
 </head>
 
 <body>
-	<header>
-		<h1>Tic-Tac-Toe</h1>
-	</header>
 	<main>
-		<section class="player-info">
-			<h2>Current Player: <span class="current-player">Player One</span></h2>
-		</section>
-		<section class="board-container">
-			<div class="game-board"></div>
-		</section>
+		<header>
+			<h2 class="x-color">Tic <span class="o-color">Tac</span> Toe</h2>
+		</header>
+		<article class="game-board"></article>
+		<article class="player-info">
+			<h3>
+				<span class="current-player"></span>'s turn.
+			</h3>
+		</article>
+		<article class="buttons">
+			<button type="button" id="reset-btn"></button>
+			<button type="button" id="home-btn"></button>
+		</article>
 	</main>
+	<section class="modal hidden">
+		<h1>Tic</h1>
+		<h1>Tac</h1>
+		<h1>Toe</h1>
+	</section>
 	<footer>
-		<div class="footer-text">
-			<div id="my-name">&copy; 2023 Walker Marlatt</div>
-			<div>The Odin Project</div>
-		</div>
-		<a href="https://github.com/marlatte"
-		   target="_blank">
-			<i class="fa fa-github"></i>
-		</a>
+			<p>Walker</p>
+			<a href="https://github.com/marlatte"
+			   target="_blank">
+				<i class="fa fa-github"></i>
+			</a>
+			<p>Marlatt</p>
 	</footer>
 </body>
 

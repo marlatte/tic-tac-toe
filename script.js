@@ -170,10 +170,10 @@ function gameController() {
 		} else {
 			switchPlayer();
 			printNextRound();
-			if (currentPlayer.getMarker() === 2) {
-				const computerChoice = computerPlays();
-				playRound(computerChoice[0], computerChoice[1]);
-			}
+			// if (currentPlayer.getMarker() === 2) {
+			// 	const computerChoice = computerPlays();
+			// 	playRound(computerChoice[0], computerChoice[1]);
+			// }
 		}
 	}
 
@@ -202,12 +202,16 @@ const screenController = (() => {
 	const currentPlayerDisplay = document.querySelector(".current-player");
 	const boardDisplay = document.querySelector(".game-board");
 
-	function updateBoard() {
-		// Clear the board.
+	function updateDisplay() {
+		// Update player turn based on marker
+		const currentPlayer = game.getCurrentPlayer().getMarker();
+		currentPlayerDisplay.classList = `current-player ${currentPlayer === 1 ? "x-char" : "o-char"}`;
+
+
+		// Clear and get the latest game board.
 		boardDisplay.textContent = "";
-		
-		// Get the latest game board.
 		grid = game.getGrid();
+
 		
 		// Loop through the board and create buttons for each square
 		grid.forEach((row, y) => {
@@ -219,7 +223,7 @@ const screenController = (() => {
 				squareBtn.dataset.row = y;
 
 				let marker = square.getValue();
-				squareBtn.textContent = marker === 0 ? "" : marker === 1 ? "X" : "O";
+				squareBtn.classList = `square ${marker === 0 ? "" : marker === 1 ? "x-char" : "o-char"}`;
 				boardDisplay.appendChild(squareBtn);
 			});
 		});
@@ -230,10 +234,10 @@ const screenController = (() => {
 		const inputColumn = e.target.dataset.column;
 		if (!inputRow) return;
 		game.playRound(inputRow, inputColumn);
-		updateBoard()
+		updateDisplay()
 	}
 
 	boardDisplay.addEventListener("click", handleClick)
 
-	updateBoard();
+	updateDisplay();
 })();

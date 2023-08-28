@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Grandstander:wght@400;600;700;800;900&display=swap');
+
 /* ---------------     Reboot     --------------- */
 
 *,
@@ -19,7 +21,16 @@ button {
 /* ---------------     Utilities & Universals     --------------- */
 
 :root {
-	--eg-var: red;
+	--main-bg: #322267;
+	--accent-light: #6748C4;
+	--accent-dark: #38238D;
+	--text-strong: #E9E3FF;
+	--text-light: #f7f5ff;
+	--x-color: #EC1550;
+	--o-color: #FFD133;
+
+	--font-game-piece: "Fredoka";
+	--font-main: "Grandstander";
 }
 
 body {
@@ -28,7 +39,22 @@ body {
 	display: flex;
 	flex-direction: column;
 
-	background-color: antiquewhite;
+	background-color: var(--main-bg);
+	color: var(--text-light);
+
+	font-family: var(--font-main);
+}
+
+.hidden {
+	display: none;
+}
+
+.o-color {
+	color: var(--o-color);
+}
+
+.x-color {
+	color: var(--x-color);
 }
 
 /* ---------------     /Utilities & Universals     --------------- */
@@ -39,6 +65,7 @@ body {
 
 header {
 	margin: 10px;
+	font-size: min(10vw, 50px);
 }
 
 /* ---------------     /Header     --------------- */
@@ -46,28 +73,18 @@ header {
 /* ---------------     Main     --------------- */
 
 main {
+	--grid-dimensions: min(90vw, 470px);
 	padding: 20px;
 
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	gap: 30px;
 }
-
-/* ---------------     Player Info     --------------- */
-
-/* ---------------     /Player Info     --------------- */
 
 /* ---------------     Board     --------------- */
 
-.board-container {
-	align-self: center;
-	padding: 5%;
-	
-	background-color: white;
-	border: 1px solid black;
-}
-
 .game-board {
-	--grid-dimensions: 80vw;
 
 	height: var(--grid-dimensions);
 	width: var(--grid-dimensions);
@@ -77,14 +94,67 @@ main {
 	grid-template-columns: repeat(3, 1fr);
 	gap: 2%;
 
-	background-color: black;
+	background-color: var(--accent-light);
 }
 
 .square {
-	background-color: #fff;
+	background-color: var(--main-bg);
+}
+
+::after {
+	font-family: var(--font-game-piece);
+	font-size: 80px;
+	font-weight: bold;
+}
+
+.x-char::after {
+	content: "X";
+	color: var(--x-color);
+}
+
+.o-char::after {
+	content: "O";
+	color: var(--o-color);
 }
 
 /* ---------------     /Board     --------------- */
+
+/* ---------------     Player Info     --------------- */
+
+.player-info {
+	--player-font-size: 20px;
+
+	font-size: var(--player-font-size);
+}
+
+.player-info ::after {
+	position: relative;
+	top: 2px;
+	right: 5px;
+
+	font-size: calc(var(--player-font-size) * 2);
+}
+
+/* ---------------     /Player Info     --------------- */
+
+/* ---------------     Buttons     --------------- */
+
+.buttons {
+	--button-dimensions: 90px;
+
+	display: flex;
+	gap: calc(var(--grid-dimensions) * 0.3);
+}
+
+.buttons button {
+	width: var(--button-dimensions);
+	height: var(--button-dimensions);
+
+	background-color: var(--accent-light);
+	border-radius: var(--button-dimensions);
+}
+
+/* ---------------     /Buttons     --------------- */
 /* ---------------     /Main     --------------- */
 
 /* ---------------     Footer     --------------- */
@@ -93,16 +163,16 @@ footer {
 	margin: auto 0 15px;
 
 	display: flex;
-	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	gap: 10px;
 
 	text-align: center;
-	font-size: 22px;
+	font-size: 20px;
 }
 
-#my-name {
-	font-weight: bold;
+footer p {
+	padding-top: 4px;
 }
 
 a {
