@@ -15,37 +15,55 @@
 </head>
 
 <body>
-	<main>
-		<header>
-			<h2 class="x-color">Tic <span class="o-color">Tac</span> Toe</h2>
-		</header>
+	<header class="modal">
+		<h1 class="x-color">
+			<div>
+				<span>T</span>
+				<span>i</span>
+				<span class="o-color">c</span>
+			</div>
+			<div>
+				<span>T</span>
+				<span class="o-color adj-right">a</span>
+				<span>c</span>
+			</div>
+			<div>
+				<span class="o-color">T</span>
+				<span>o</span>
+				<span>e</span>
+			</div>
+		</h1>
+		<div class="start-buttons">
+			<button type="button" class="start">Single Player</button>
+			<button type="button" class="start">Multi-Player</button>
+		</div>
+	</header>
+	<main class="hidden">
+		<h2 class="upper-text x-color">Tic <span class="o-color">Tac</span> Toe</h2>
 		<article class="game-board"></article>
-		<article class="player-info">
-			<h3>
-				<span class="current-player"></span>'s turn.
-			</h3>
-		</article>
+		<h3 class="player-info">
+			<span class="current-player"></span>'s turn.
+		</h3>
 		<article class="buttons">
-			<button type="button" id="reset-btn">
-				<i class="fa fa-refresh" aria-hidden="true"></i>
+			<button type="button"
+					id="reset-btn">
+				<i class="fa fa-refresh"
+				   aria-hidden="true"></i>
 			</button>
-			<button type="button" id="home-btn">
-				<i class="fa fa-home" aria-hidden="true"></i>
+			<button type="button"
+					id="home-btn">
+				<i class="fa fa-home"
+				   aria-hidden="true"></i>
 			</button>
 		</article>
 	</main>
-	<section class="modal hidden">
-		<h1>Tic</h1>
-		<h1>Tac</h1>
-		<h1>Toe</h1>
-	</section>
 	<footer>
-			<p>Walker</p>
-			<a href="https://github.com/marlatte"
-			   target="_blank">
-				<i class="fa fa-github"></i>
-			</a>
-			<p>Marlatt</p>
+		<p>Walker</p>
+		<a href="https://github.com/marlatte"
+		   target="_blank">
+			<i class="fa fa-github"></i>
+		</a>
+		<p>Marlatt</p>
 	</footer>
 </body>
 
