@@ -13,8 +13,11 @@
 
 button {
 	background: none;
+	color: unset;
 	border: none;
 	cursor: pointer;
+	font-family: unset;
+	font-size: unset;
 }
 
 /* ---------------     /Reboot     --------------- */
@@ -28,6 +31,7 @@ button {
 	--text-light: #f7f5ff;
 	--x-color: #EC1550;
 	--o-color: #FFD133;
+	--winning-squares: #2AD075;
 
 	--font-game-piece: "Fredoka";
 	--font-main: "Grandstander";
@@ -95,10 +99,18 @@ main {
 	gap: 2%;
 
 	background-color: var(--accent-light);
+	border-radius: 15px;
+}
+
+.sqr-container {
+	display: grid;
+	background-color: var(--main-bg);
 }
 
 .square {
-	background-color: var(--main-bg);
+	height: 90%;
+	width: 90%;
+	margin: auto;
 }
 
 ::after {
@@ -115,6 +127,15 @@ main {
 .o-char::after {
 	content: "O";
 	color: var(--o-color);
+}
+
+.winner .square {
+	background-color: var(--winning-squares);
+	border-radius: 100px;
+}
+
+.winner ::after {
+	color: var(--text-light);
 }
 
 /* ---------------     /Board     --------------- */
@@ -144,6 +165,9 @@ main {
 
 	display: flex;
 	gap: calc(var(--grid-dimensions) * 0.3);
+	
+	color: var(--text-strong);
+	font-size: 50px;
 }
 
 .buttons button {
@@ -152,6 +176,16 @@ main {
 
 	background-color: var(--accent-light);
 	border-radius: var(--button-dimensions);
+}
+
+button .fa-refresh {
+	position: relative;
+	top: 3px;
+	left: 1px;
+}
+
+button .fa-home {
+	font-size: 60px;
 }
 
 /* ---------------     /Buttons     --------------- */
@@ -169,6 +203,7 @@ footer {
 
 	text-align: center;
 	font-size: 20px;
+	color: var(--text-strong);
 }
 
 footer p {
@@ -186,7 +221,6 @@ a {
 }
 
 .fa-github:hover {
-	color: currentColor;
 	transition: transform 0.4s ease-in-out;
 	transform: rotate(-360deg) scale(1.3);
 }

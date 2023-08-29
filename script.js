@@ -1,47 +1,3 @@
-/*
-
-Logical flow:
--------------
-gameBoard:
-	Generate a 3x3 grid.
-	Add an obj to each square with methods for:
-		Getting value
-		Setting value
-	Mark a square for the current player if it's open.
-	Export:
-		markSquare, getGrid
-
-
-gameController
-	Create 2 players with names and tokens (1 and 2).
-	Get the board
-	On user input, play a round:
-		Mark a square on the board
-		Switch active player
-		Check for a winner
-			Tie = full board
-			Winner = 3 in a row/column/diagonal
-	Export:
-		playRound, getBoard, getCurrentPlayer
-
-displayController
-	Select DOM elements.
-	Update the screen
-		Clear the board.
-		Get the latest game board.
-		Loop through the board and create buttons for each square
-	Event handler
-		playRound(relevant info)
-		Update screen
-	Event Listener
-		Trigger event handler
-
-
-
-
-
-*/
-
 function gameBoard() {
 	// Generate a 3x3 grid.
 	const grid = [];
@@ -130,19 +86,51 @@ function gameController() {
 						if (y === 0 && x === 0 &&
 							grid[y][x] === grid[y + 1][x + 1] &&
 							grid[y][x] === grid[y + 2][x + 2]) {
-							return { type: "Win", winPattern: "diagonally, top L to bottom R" };
+							return {
+								type: "Win",
+								winPattern: "diagonally, top L to bottom R",
+								squares: {
+									start: { y, x },
+									middle: { y: y + 1, x: x + 1 },
+									end: { y: y + 2, x: x + 2 }
+								}
+							};
 						} else if (y === 0 && x === 2 &&
 							grid[y][x] === grid[y + 1][x - 1] &&
 							grid[y][x] === grid[y + 2][x - 2]) {
-							return { type: "Win", winPattern: "diagonally, top R to bottom L" };
+							return {
+								type: "Win",
+								winPattern: "diagonally, top R to bottom L",
+								squares: {
+									start: { y, x },
+									middle: { y: y + 1, x: x - 1 },
+									end: { y: y + 2, x: x - 2 }
+								}
+							};
 						} else if (y === 0 &&
 							grid[y][x] === grid[y + 1][x] &&
 							grid[y][x] === grid[y + 2][x]) {
-							return { type: "Win", winPattern: "vertically" };
+							return {
+								type: "Win",
+								winPattern: "vertically",
+								squares: {
+									start: { y, x },
+									middle: { y: y + 1, x },
+									end: { y: y + 2, x }
+								}
+							};
 						} else if (x === 0 &&
 							grid[y][x] === grid[y][x + 1] &&
 							grid[y][x] === grid[y][x + 2]) {
-							return { type: "Win", winPattern: "horizontally" };
+							return {
+								type: "Win",
+								winPattern: "horizontally",
+								squares: {
+									start: { y, x },
+									middle: { y, x: x + 1 },
+									end: { y, x: x + 2 }
+								}
+							};
 						}
 					}
 				}
@@ -151,7 +139,7 @@ function gameController() {
 			// 	Tie = full board
 			if (!grid.some(row => row.some(square => square === 0))) {
 				console.log("Tie");
-				return { type: "tie", winPattern: "" }
+				return { type: "tie" }
 			} else return;
 		}
 
@@ -160,7 +148,6 @@ function gameController() {
 			console.log(
 				`Game Over: ${gameDetails.type === "tie" ? "Tie" : `${currentPlayer.getName()} wins ${gameDetails.winPattern}`}.`
 			);
-
 		}
 
 		// Check whether to play next round
@@ -175,9 +162,13 @@ function gameController() {
 			// 	playRound(computerChoice[0], computerChoice[1]);
 			// }
 		}
+
+		const getGameDetails = () => gameDetails;
+
+		return { getGameDetails };
 	}
 
-	// Computer's turn
+	// Computer Logic
 	function computerPlays() {
 		let openPositions = [];
 		for (let y = 0; y < 3; y++) {
@@ -189,7 +180,7 @@ function gameController() {
 		return openPositions[Math.floor(Math.random() * openPositions.length)]
 	}
 
-	// Starting game info
+	// Init
 	printNextRound();
 
 	return { playRound, getGrid: board.getGrid, getCurrentPlayer }
@@ -210,34 +201,57 @@ const screenController = (() => {
 
 		// Clear and get the latest game board.
 		boardDisplay.textContent = "";
-		grid = game.getGrid();
+		const grid = game.getGrid();
 
-		
 		// Loop through the board and create buttons for each square
 		grid.forEach((row, y) => {
 			row.forEach((square, x) => {
+				const sqrContainer = document.createElement("div");
+				sqrContainer.classList.add("sqr-container");
+
 				const squareBtn = document.createElement("button");
 				squareBtn.classList.add("square");
-				
+
 				squareBtn.dataset.column = x;
 				squareBtn.dataset.row = y;
 
 				let marker = square.getValue();
 				squareBtn.classList = `square ${marker === 0 ? "" : marker === 1 ? "x-char" : "o-char"}`;
-				boardDisplay.appendChild(squareBtn);
+				boardDisplay.appendChild(sqrContainer);
+				sqrContainer.appendChild(squareBtn);
 			});
 		});
+	}
+
+	function endGameDisplay(gameDetails) {
+		const squares = gameDetails.squares;
+		console.log(squares);
+
+		for (const pair in squares) {
+			console.log(squares[pair].y);
+			Array.from(boardDisplay.children).find(container => {
+				return (+container.firstElementChild.dataset.row === squares[pair].y) &&
+					(+container.firstElementChild.dataset.column === squares[pair].x)
+			}).classList.add("winner");
+		}
+
+		boardDisplay.removeEventListener("click", handleClick);
+
 	}
 
 	function handleClick(e) {
 		const inputRow = e.target.dataset.row;
 		const inputColumn = e.target.dataset.column;
 		if (!inputRow) return;
-		game.playRound(inputRow, inputColumn);
+		const gameDetails = game.playRound(inputRow, inputColumn).getGameDetails();
 		updateDisplay()
+		if (!!gameDetails) {
+			endGameDisplay(gameDetails);
+		}
 	}
 
-	boardDisplay.addEventListener("click", handleClick)
-
-	updateDisplay();
+	const newGame = (() => {
+		boardDisplay.addEventListener("click", handleClick)
+		updateDisplay();
+	})();
 })();
