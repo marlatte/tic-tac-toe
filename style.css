@@ -31,7 +31,7 @@ button {
 	--text-light: #f7f5ff;
 	--x-color: #EC1550;
 	--o-color: #FFD133;
-	--winning-squares: #2AD075;
+	--winning-color: #2AD075;
 
 	--font-game-piece: "Fredoka";
 	--font-main: "Grandstander";
@@ -179,7 +179,7 @@ main {
 }
 
 .winner .square {
-	background-color: var(--winning-squares);
+	background-color: var(--winning-color);
 	border-radius: 100px;
 }
 
@@ -192,9 +192,10 @@ main {
 /* ---------------     Player Info     --------------- */
 
 .player-info {
-	--player-font-size: 20px;
+	--player-font-size: 30px;
 
 	font-size: var(--player-font-size);
+	line-height: 1.1rem;
 }
 
 .player-info ::after {
@@ -203,6 +204,10 @@ main {
 	right: 5px;
 
 	font-size: calc(var(--player-font-size) * 2);
+}
+
+.player-info .game-over {
+	color: var(--winning-color);
 }
 
 /* ---------------     /Player Info     --------------- */

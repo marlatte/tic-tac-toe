@@ -31,7 +31,15 @@ function gameBoard() {
 		return grid.map(row => row.map(square => square.getValue()));
 	}
 
-	return { markSquare, getGrid, getGridValues }
+	function resetGame() {
+		grid.forEach(row => {
+			row.forEach(square => {
+				square.setValue(0)
+			})
+		})
+	}
+
+	return { markSquare, getGrid, getGridValues, resetGame }
 }
 
 function gameController() {
@@ -180,18 +188,25 @@ function gameController() {
 		return openPositions[Math.floor(Math.random() * openPositions.length)]
 	}
 
-	// Init
-	printNextRound();
+	function resetGame() {
+		currentPlayer = player1;
+		board.resetGame();
+		console.log("---------- \n New Game \n----------");
+		printNextRound();
+	}
 
-	return { playRound, getGrid: board.getGrid, getCurrentPlayer }
+	return { playRound, getGrid: board.getGrid, getCurrentPlayer, resetGame }
 }
 
 const screenController = (() => {
-	console.log("Hi there");
 	const game = gameController();
 
 	const currentPlayerDisplay = document.querySelector(".current-player");
 	const boardDisplay = document.querySelector(".game-board");
+	const gameText = document.querySelectorAll(".game-text");
+	const outcome = document.querySelector(".outcome");
+	const resetBtn = document.getElementById("reset-btn");
+	const homeBtn = document.getElementById("home-btn");
 
 	function updateDisplay() {
 		// Update player turn based on marker
@@ -224,22 +239,29 @@ const screenController = (() => {
 	}
 
 	function endGameDisplay(gameDetails) {
-		const squares = gameDetails.squares;
-		console.log(squares);
-
-		for (const pair in squares) {
-			console.log(squares[pair].y);
-			Array.from(boardDisplay.children).find(container => {
-				return (+container.firstElementChild.dataset.row === squares[pair].y) &&
-					(+container.firstElementChild.dataset.column === squares[pair].x)
-			}).classList.add("winner");
+		if (gameDetails.type === "tie") {
+			currentPlayerDisplay.classList = "current-player";
+			outcome.textContent = "Tie"
+		} else {
+			outcome.textContent = "wins!"
+			const squares = gameDetails.squares;
+			for (const pair in squares) {
+				Array.from(boardDisplay.children).find(container => {
+					return (+container.firstElementChild.dataset.row === squares[pair].y) &&
+						(+container.firstElementChild.dataset.column === squares[pair].x)
+				}).classList.add("winner");
+			}
 		}
 
-		boardDisplay.removeEventListener("click", handleClick);
+		gameText.forEach(el => {
+			el.classList.toggle("hidden");
+		})
+
+		boardDisplay.removeEventListener("click", handleGamePlay);
 
 	}
 
-	function handleClick(e) {
+	function handleGamePlay(e) {
 		const inputRow = e.target.dataset.row;
 		const inputColumn = e.target.dataset.column;
 		if (!inputRow) return;
@@ -250,8 +272,31 @@ const screenController = (() => {
 		}
 	}
 
-	const newGame = (() => {
-		boardDisplay.addEventListener("click", handleClick)
+	function resetGame() {
+		setGameText()
+		game.resetGame()
+		boardDisplay.addEventListener("click", handleGamePlay)
 		updateDisplay();
-	})();
+	}
+
+	function setGameText() {
+		for (let i = 0; i < gameText.length; i++) {
+			// Odds: Hidden to start
+			if ((i & 1) && !gameText[i].classList.value.includes("hidden")) {
+				gameText[i].classList.add("hidden");
+			}
+			// Evens: Shown at start
+			if (!(i & 1) && gameText[i].classList.value.includes("hidden")) {
+				gameText[i].classList.remove("hidden");
+			}
+		}
+	}
+
+	function goToHomeScreen() {
+
+	}
+
+	resetGame();
+	resetBtn.addEventListener("click", resetGame);
+	homeBtn.addEventListener("click", goToHomeScreen);
 })();
