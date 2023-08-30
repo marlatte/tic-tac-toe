@@ -160,15 +160,12 @@ function gameController(mode) {
 
 		// Check whether to play next round
 		const gameDetails = checkGameOver()
+
 		if (!!gameDetails) {
 			endGame(gameDetails);
 		} else {
 			switchPlayer();
 			printNextRound();
-			if ((mode === "single") && (currentPlayer.getMarker() === 2)) {
-				const computerChoice = computerPlays();
-				playRound(computerChoice[0], computerChoice[1]);
-			}
 		}
 
 		const getGameDetails = () => gameDetails;
@@ -177,7 +174,7 @@ function gameController(mode) {
 	}
 
 	// Computer Logic
-	function computerPlays() {
+	function getComputerChoice() {
 		let openPositions = [];
 		for (let y = 0; y < 3; y++) {
 			for (let x = 0; x < 3; x++) {
@@ -195,11 +192,12 @@ function gameController(mode) {
 		printNextRound();
 	}
 
-	return { playRound, getGrid: board.getGrid, getCurrentPlayer, resetGame }
+	return { playRound, getGrid: board.getGrid, getCurrentPlayer, resetGame, getComputerChoice }
 }
 
 const screenController = (() => {
 	let game;
+	let playMode;
 
 	const homeScreen = document.querySelector("header");
 	const startBtns = document.querySelectorAll(".start");
@@ -260,26 +258,40 @@ const screenController = (() => {
 		gameText.forEach(el => {
 			el.classList.toggle("hidden");
 		})
-
-		boardDisplay.removeEventListener("click", handleGamePlay);
+		
+		boardDisplay.removeEventListener("click", handleGameClick)
 
 	}
 
-	function handleGamePlay(e) {
+	function handleGameClick(e) {
 		const inputRow = e.target.dataset.row;
 		const inputColumn = e.target.dataset.column;
 		if (!inputRow) return;
-		const gameDetails = game.playRound(inputRow, inputColumn).getGameDetails();
+		playRound(inputRow, inputColumn);
+		
+		// Check for computer turn
+		if ((playMode === "single") && (game.getCurrentPlayer().getMarker() === 2)) {
+			boardDisplay.removeEventListener("click", handleGameClick)
+			const computerChoice = game.getComputerChoice();
+			setTimeout(() => {
+				playRound(computerChoice[0], computerChoice[1]);
+			}, 300);
+		}
+	}
+	
+	function playRound(row, column) {
+		const gameDetails = game.playRound(row, column).getGameDetails();
 		updateDisplay()
 		if (!!gameDetails) {
 			endGameDisplay(gameDetails);
-		}
+		} else boardDisplay.addEventListener("click", handleGameClick)
 	}
 
-	function resetGame() {
+	function resetGame(mode) {
+		playMode = mode;
 		setGameText()
 		game.resetGame()
-		boardDisplay.addEventListener("click", handleGamePlay)
+		boardDisplay.addEventListener("click", handleGameClick)
 		updateDisplay();
 	}
 
@@ -305,10 +317,10 @@ const screenController = (() => {
 
 	function startGame(e) {
 		game = gameController(e.target.id);
-		resetGame();
+		resetGame(e.target.id);
 		homeScreen.classList = "hidden";
 		gameScreen.classList = "";
-		resetBtn.addEventListener("click", resetGame);
+		resetBtn.addEventListener("click", () => resetGame(playMode));
 		homeBtn.addEventListener("click", goToHomeScreen);
 		startBtns.forEach(button => {
 			button.removeEventListener("click", startGame)
