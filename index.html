@@ -15,7 +15,7 @@
 </head>
 
 <body>
-	<header class="hidden">
+	<header class="">
 		<h1 class="x-color">
 			<div>
 				<span>T</span>
@@ -34,11 +34,15 @@
 			</div>
 		</h1>
 		<div class="start-buttons">
-			<button type="button" class="start">Single Player</button>
-			<button type="button" class="start">Multi-Player</button>
+			<button type="button"
+					class="start"
+					id="single">Single Player</button>
+			<button type="button"
+					class="start"
+					id="multi">Multi-Player</button>
 		</div>
 	</header>
-	<main class="">
+	<main class="hidden">
 		<h2 class="game-text x-color ">Tic <span class="o-color">Tac</span> Toe</h2>
 		<h2 class="game-text o-color hidden">Game Over</h2>
 		<article class="game-board"></article>

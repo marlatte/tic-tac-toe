@@ -42,7 +42,7 @@ function gameBoard() {
 	return { markSquare, getGrid, getGridValues, resetGame }
 }
 
-function gameController() {
+function gameController(mode) {
 	const PlayerFactory = (number) => {
 		const name = `Player ${number}`;
 		const marker = number;
@@ -165,10 +165,10 @@ function gameController() {
 		} else {
 			switchPlayer();
 			printNextRound();
-			// if (currentPlayer.getMarker() === 2) {
-			// 	const computerChoice = computerPlays();
-			// 	playRound(computerChoice[0], computerChoice[1]);
-			// }
+			if ((mode === "single") && (currentPlayer.getMarker() === 2)) {
+				const computerChoice = computerPlays();
+				playRound(computerChoice[0], computerChoice[1]);
+			}
 		}
 
 		const getGameDetails = () => gameDetails;
@@ -199,12 +199,15 @@ function gameController() {
 }
 
 const screenController = (() => {
-	const game = gameController();
+	let game;
 
-	const currentPlayerDisplay = document.querySelector(".current-player");
+	const homeScreen = document.querySelector("header");
+	const startBtns = document.querySelectorAll(".start");
+
+	const gameScreen = document.querySelector("main");
 	const boardDisplay = document.querySelector(".game-board");
+	const currentPlayerDisplay = document.querySelector(".current-player");
 	const gameText = document.querySelectorAll(".game-text");
-	const outcome = document.querySelector(".outcome");
 	const resetBtn = document.getElementById("reset-btn");
 	const homeBtn = document.getElementById("home-btn");
 
@@ -291,10 +294,26 @@ const screenController = (() => {
 	}
 
 	function goToHomeScreen() {
-
+		homeScreen.classList = "";
+		gameScreen.classList = "hidden";
+		startBtns.forEach(button => {
+			button.addEventListener("click", startGame)
+		})
+		resetBtn.removeEventListener("click", resetGame);
+		homeBtn.removeEventListener("click", goToHomeScreen);
 	}
 
-	resetGame();
-	resetBtn.addEventListener("click", resetGame);
-	homeBtn.addEventListener("click", goToHomeScreen);
+	function startGame(e) {
+		game = gameController(e.target.id);
+		resetGame();
+		homeScreen.classList = "hidden";
+		gameScreen.classList = "";
+		resetBtn.addEventListener("click", resetGame);
+		homeBtn.addEventListener("click", goToHomeScreen);
+		startBtns.forEach(button => {
+			button.removeEventListener("click", startGame)
+		})
+	}
+
+	goToHomeScreen();
 })();
