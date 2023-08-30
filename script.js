@@ -307,10 +307,10 @@ const screenController = (() => {
 
 	function goToHomeScreen() {
 		homeScreen.classList = "";
-		gameScreen.classList = "hidden";
 		startBtns.forEach(button => {
 			button.addEventListener("click", startGame)
 		})
+		boardDisplay.removeEventListener("click", handleGameClick)
 		resetBtn.removeEventListener("click", resetGame);
 		homeBtn.removeEventListener("click", goToHomeScreen);
 	}
@@ -318,8 +318,7 @@ const screenController = (() => {
 	function startGame(e) {
 		game = gameController(e.target.id);
 		resetGame(e.target.id);
-		homeScreen.classList = "hidden";
-		gameScreen.classList = "";
+		homeScreen.classList = "up-north";
 		resetBtn.addEventListener("click", () => resetGame(playMode));
 		homeBtn.addEventListener("click", goToHomeScreen);
 		startBtns.forEach(button => {
