@@ -121,17 +121,19 @@ header button:hover {
 /* ---------------     Main     --------------- */
 
 main {
-	--grid-dimensions: min(90vw, 470px);
-	padding: 20px;
+	--grid-dimensions: 90vw;
+
+	flex: 1;
+	margin: 30px 0;
 	
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 30px;
+	justify-content: space-between;
 }
 
-.upper-text {
-	margin-top: 24px;
+.game-text {
+	margin-top: 16px;
 	font-size: min(calc(20vw - 15px), 60px);
 }
 
@@ -162,18 +164,18 @@ main {
 	margin: auto;
 }
 
-::after {
+:not(.fa)::before {
 	font-family: var(--font-game-piece);
 	font-size: calc(var(--grid-dimensions) * 0.23);
 	font-weight: bold;
 }
 
-.x-char::after {
+.x-char::before {
 	content: "X";
 	color: var(--x-color);
 }
 
-.o-char::after {
+.o-char::before {
 	content: "O";
 	color: var(--o-color);
 }
@@ -183,7 +185,7 @@ main {
 	border-radius: 100px;
 }
 
-.winner ::after {
+.winner ::before {
 	color: var(--text-light);
 }
 
@@ -191,23 +193,23 @@ main {
 
 /* ---------------     Player Info     --------------- */
 
-.player-info {
-	--player-font-size: 30px;
+.current-player {
+	--player-font-size: 50px;
+
+	height: 80px;
+
+	display: flex;
+	align-items: flex-end;
+	gap: 10px;
 
 	font-size: var(--player-font-size);
-	line-height: 1.1rem;
+	text-transform: uppercase;
 }
 
-.player-info ::after {
+.current-player::before {
 	position: relative;
-	top: 2px;
-	right: 5px;
 
-	font-size: calc(var(--player-font-size) * 2);
-}
-
-.player-info .game-over {
-	color: var(--winning-color);
+	font-size: calc(var(--player-font-size) * 1.2);
 }
 
 /* ---------------     /Player Info     --------------- */
@@ -216,6 +218,8 @@ main {
 
 .endgame-buttons {
 	--button-dimensions: 70px;
+
+	margin-top: 10px;
 
 	display: flex;
 	gap: calc(var(--grid-dimensions) * 0.3);
@@ -247,7 +251,7 @@ button .fa-home {
 /* ---------------     Footer     --------------- */
 
 footer {
-	margin: auto 0 15px;
+	margin-bottom: 15px;
 
 	display: flex;
 	align-items: center;
@@ -283,3 +287,10 @@ a {
 
 
 /* ---------------     /CONTENT     --------------- */
+
+
+@media screen and (min-width: 700px) {
+	main {
+		--grid-dimensions: min(50vw, 470px);
+	}
+}

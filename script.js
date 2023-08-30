@@ -240,10 +240,11 @@ const screenController = (() => {
 
 	function endGameDisplay(gameDetails) {
 		if (gameDetails.type === "tie") {
-			currentPlayerDisplay.classList = "current-player";
-			outcome.textContent = "Tie"
+			currentPlayerDisplay.classList = "current-player outcome";
+			currentPlayerDisplay.textContent = "It's a tie!"
 		} else {
-			outcome.textContent = "wins!"
+			currentPlayerDisplay.textContent = "wins!"
+			currentPlayerDisplay.classList.add("outcome");
 			const squares = gameDetails.squares;
 			for (const pair in squares) {
 				Array.from(boardDisplay.children).find(container => {
@@ -280,16 +281,13 @@ const screenController = (() => {
 	}
 
 	function setGameText() {
-		for (let i = 0; i < gameText.length; i++) {
-			// Odds: Hidden to start
-			if ((i & 1) && !gameText[i].classList.value.includes("hidden")) {
-				gameText[i].classList.add("hidden");
-			}
-			// Evens: Shown at start
-			if (!(i & 1) && gameText[i].classList.value.includes("hidden")) {
-				gameText[i].classList.remove("hidden");
-			}
+		if (gameText[0].classList.value.includes("hidden")) {
+			gameText[0].classList.remove("hidden");
 		}
+		if (!gameText[1].classList.value.includes("hidden")) {
+			gameText[1].classList.add("hidden");
+		}
+		currentPlayerDisplay.textContent = "'s turn."
 	}
 
 	function goToHomeScreen() {
