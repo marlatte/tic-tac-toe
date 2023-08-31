@@ -259,13 +259,11 @@ main {
 	width: var(--button-dimensions);
 	height: var(--button-dimensions);
 
+	display: grid;
+	place-content: center;
+
 	background-color: var(--accent-light);
 	border-radius: var(--button-dimensions);
-}
-
-button .fa-refresh {
-	position: relative;
-	top: 4%;
 }
 
 button .fa-home {
