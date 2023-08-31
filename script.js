@@ -200,6 +200,7 @@ const screenController = (() => {
 	let playMode;
 
 	const homeScreen = document.querySelector("header");
+	const resetScreen = document.querySelector(".reset-screen");
 	const startBtns = document.querySelectorAll(".start");
 
 	const gameScreen = document.querySelector("main");
@@ -258,7 +259,7 @@ const screenController = (() => {
 		gameText.forEach(el => {
 			el.classList.toggle("hidden");
 		})
-		
+
 		boardDisplay.removeEventListener("click", handleGameClick)
 
 	}
@@ -268,7 +269,7 @@ const screenController = (() => {
 		const inputColumn = e.target.dataset.column;
 		if (!inputRow) return;
 		playRound(inputRow, inputColumn);
-		
+
 		// Check for computer turn
 		if ((playMode === "single") && (game.getCurrentPlayer().getMarker() === 2)) {
 			boardDisplay.removeEventListener("click", handleGameClick)
@@ -278,7 +279,7 @@ const screenController = (() => {
 			}, 300);
 		}
 	}
-	
+
 	function playRound(row, column) {
 		const gameDetails = game.playRound(row, column).getGameDetails();
 		updateDisplay()
@@ -319,7 +320,13 @@ const screenController = (() => {
 		game = gameController(e.target.id);
 		resetGame(e.target.id);
 		homeScreen.classList = "up-north";
-		resetBtn.addEventListener("click", () => resetGame(playMode));
+		resetBtn.addEventListener("click", () => {
+			resetScreen.classList.remove("shrunk");
+			setTimeout(() => {
+				resetGame(playMode)
+				resetScreen.classList.add("shrunk");
+			}, 900);
+		});
 		homeBtn.addEventListener("click", goToHomeScreen);
 		startBtns.forEach(button => {
 			button.removeEventListener("click", startGame)

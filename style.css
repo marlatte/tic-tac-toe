@@ -41,6 +41,7 @@ button {
 
 body {
 	min-height: 100lvh;
+	overflow: hidden;
 
 	display: flex;
 	flex-direction: column;
@@ -270,6 +271,51 @@ button .fa-home {
 
 /* ---------------     /Buttons     --------------- */
 /* ---------------     /Main     --------------- */
+
+/* ---------------     Reset Screen     --------------- */
+
+.reset-screen {
+	--reset-dimensions: max(100vw, 100vh);
+
+	height: var(--reset-dimensions);
+	width: var(--reset-dimensions);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -50%;
+	z-index: 1;
+
+	display: flex;
+
+
+	transition:
+		scale 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28),
+		box-shadow 0s;
+}
+
+.reset-circle {
+	height: 100%;
+	width: 100%;
+
+	background-color: var(--header-bg);
+	background: repeating-conic-gradient(from 11.25deg, var(--accent-dark) 0deg 22.5deg, var(--main-bg) 22.5deg 45deg);
+	box-shadow: 0 5px 20px var(--header-shadow);
+	border-radius: var(--reset-dimensions);
+}
+
+.reset-screen.shrunk {
+	transform: scale(0);
+	transition:
+		scale 0.8s cubic-bezier(0.6, -0.25, 0.735, 0.045),
+		box-shadow 1s;
+}
+
+.reset-screen.up-north {
+	transform: translateY(-100%);
+	box-shadow: none;
+}
+
+/* ---------------     /Reset Screen     --------------- */
 
 /* ---------------     Footer     --------------- */
 
