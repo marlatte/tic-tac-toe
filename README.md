@@ -5,4 +5,4 @@ Create a tic tac toe game using factory functions and the module pattern to use 
 Requirements can be found [here](https://www.theodinproject.com/lessons/node-path-javascript-tic-tac-toe).
 
 
-👉 [Live Demo](#) 👈
+👉 [Live Demo](https://marlatte.github.io/tic-tac-toe/) 👈
