@@ -40,7 +40,7 @@ button {
 }
 
 body {
-	min-height: 100lvh;
+	min-height: 100svh;
 	overflow: hidden;
 
 	display: flex;
@@ -300,6 +300,7 @@ button .fa-home {
 			var(--main-bg) 22.5deg 45deg);
 	border-radius: var(--reset-dimensions);
 	
+	-webkit-transform: scale(var(--circle-scale)) rotate(180deg);
 	transform: scale(var(--circle-scale)) rotate(180deg);
 	transition: all 1s linear(0 0%, 1.2 70%);
 }
@@ -310,6 +311,7 @@ button .fa-home {
 }
 
 .shrunk .reset-circle {
+	-webkit-transform: rotate(0deg);
 	transform: rotate(0deg);
 	transition: all 1s linear(0 0%, 1.2 40%);
 }
