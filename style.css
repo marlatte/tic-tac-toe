@@ -275,44 +275,50 @@ button .fa-home {
 /* ---------------     Reset Screen     --------------- */
 
 .reset-screen {
-	--reset-dimensions: max(100vw, 100vh);
+	height: 100vh;
+	width: 100vw;
 
-	height: var(--reset-dimensions);
-	width: var(--reset-dimensions);
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin: -50%;
 	z-index: 1;
 
 	display: flex;
+	align-items: center;
+	justify-content: center;
 
-
-	transition:
-		scale 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28),
-		box-shadow 0s;
+	transition: all 0.8s;
 }
 
 .reset-circle {
-	height: 100%;
-	width: 100%;
+	--reset-dimensions: min(100vh, 100vw);
+	--circle-scale: 2.2;
 
+	height: var(--reset-dimensions);
+	width: var(--reset-dimensions);
 	background-color: var(--header-bg);
-	background: repeating-conic-gradient(from 11.25deg, var(--accent-dark) 0deg 22.5deg, var(--main-bg) 22.5deg 45deg);
-	box-shadow: 0 5px 20px var(--header-shadow);
+	background: repeating-conic-gradient(from 11.25deg,
+			var(--accent-dark) 0deg 22.5deg,
+			var(--main-bg) 22.5deg 45deg);
 	border-radius: var(--reset-dimensions);
+	
+	transform: scale(var(--circle-scale)) rotate(180deg);
+	transition: all 1s linear(0 0%, 1.2 70%);
 }
 
 .reset-screen.shrunk {
 	transform: scale(0);
-	transition:
-		scale 0.8s cubic-bezier(0.6, -0.25, 0.735, 0.045),
-		box-shadow 1s;
+	transition: all 0.8s;
 }
 
-.reset-screen.up-north {
-	transform: translateY(-100%);
-	box-shadow: none;
+.shrunk .reset-circle {
+	transform: rotate(0deg);
+	transition: all 1s linear(0 0%, 1.2 40%);
+}
+
+h3.reset-screen {
+	position: absolute;
+
+	font-size: min(calc(20vw - 15px), 60px);
+
 }
 
 /* ---------------     /Reset Screen     --------------- */
@@ -361,5 +367,9 @@ a {
 @media screen and (min-width: 700px) {
 	main {
 		--grid-dimensions: min(50vw, 470px);
+	}
+
+	.reset-circle {
+		--circle-scale: 1.2;
 	}
 }

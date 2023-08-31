@@ -200,7 +200,7 @@ const screenController = (() => {
 	let playMode;
 
 	const homeScreen = document.querySelector("header");
-	const resetScreen = document.querySelector(".reset-screen");
+	const resetScreen = document.querySelectorAll(".reset-screen");
 	const startBtns = document.querySelectorAll(".start");
 
 	const gameScreen = document.querySelector("main");
@@ -321,10 +321,14 @@ const screenController = (() => {
 		resetGame(e.target.id);
 		homeScreen.classList = "up-north";
 		resetBtn.addEventListener("click", () => {
-			resetScreen.classList.remove("shrunk");
+			resetScreen.forEach(el => {
+				el.classList.remove("shrunk");
+			})
 			setTimeout(() => {
 				resetGame(playMode)
-				resetScreen.classList.add("shrunk");
+				resetScreen.forEach(el => {
+					el.classList.add("shrunk");
+				})
 			}, 900);
 		});
 		homeBtn.addEventListener("click", goToHomeScreen);
