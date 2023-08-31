@@ -25,7 +25,7 @@ button {
 
 :root {
 	--main-bg: #322267;
-	--header-bg: #34246b;
+	--circle-alt-bg: hsl(254, 45%, 35%);
 	--header-shadow: #201641;
 	--accent-light: #6748C4;
 	--accent-dark: #38238D;
@@ -96,7 +96,7 @@ header {
 	align-items: center;
 	justify-content: space-between;
 
-	background-color: var(--header-bg);
+	background-color: var(--main-bg);
 	box-shadow: 0 5px 20px var(--header-shadow);
 	border-radius: 3vw;
 
@@ -302,9 +302,9 @@ button .fa-home {
 
 	height: var(--reset-dimensions);
 	width: var(--reset-dimensions);
-	background-color: var(--header-bg);
+	background-color: var(--circle-alt-bg);
 	background: repeating-conic-gradient(from 11.25deg,
-			var(--accent-dark) 0deg 22.5deg,
+			var(--circle-alt-bg) 0deg 22.5deg,
 			var(--main-bg) 22.5deg 45deg);
 	border-radius: var(--reset-dimensions);
 	
