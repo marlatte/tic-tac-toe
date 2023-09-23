@@ -42,7 +42,7 @@ const gameBoard = (() => {
 	return { markSquare, getGrid, getGridValues, resetGame };
 })();
 
-function gameController(mode) {
+const gameController = (() => {
 	const PlayerFactory = (number) => {
 		const name = `Player ${number}`;
 		const marker = number;
@@ -221,10 +221,9 @@ function gameController(mode) {
 		resetGame,
 		getComputerChoice,
 	};
-}
+})();
 
 const screenController = (() => {
-	let game;
 	let playMode;
 
 	const homeScreen = document.querySelector("header");
@@ -240,14 +239,14 @@ const screenController = (() => {
 
 	function updateDisplay() {
 		// Update player turn based on marker
-		const currentPlayer = game.getCurrentPlayer().getMarker();
+		const currentPlayer = gameController.getCurrentPlayer().getMarker();
 		currentPlayerDisplay.classList = `current-player ${
 			currentPlayer === 1 ? "x-char" : "o-char"
 		}`;
 
 		// Clear and get the latest game board.
 		boardDisplay.textContent = "";
-		const grid = game.getGrid();
+		const grid = gameController.getGrid();
 
 		// Loop through the board and create buttons for each square
 		grid.forEach((row, y) => {
@@ -309,10 +308,10 @@ const screenController = (() => {
 		// Check for computer turn
 		if (
 			playMode === "single" &&
-			game.getCurrentPlayer().getMarker() === 2
+			gameController.getCurrentPlayer().getMarker() === 2
 		) {
 			boardDisplay.removeEventListener("click", handleGameClick);
-			const computerChoice = game.getComputerChoice();
+			const computerChoice = gameController.getComputerChoice();
 			setTimeout(() => {
 				playRound(computerChoice[0], computerChoice[1]);
 			}, 300);
@@ -320,7 +319,9 @@ const screenController = (() => {
 	}
 
 	function playRound(row, column) {
-		const gameDetails = game.playRound(row, column).getGameDetails();
+		const gameDetails = gameController
+			.playRound(row, column)
+			.getGameDetails();
 		updateDisplay();
 		if (!!gameDetails) {
 			endGameDisplay(gameDetails);
@@ -330,7 +331,7 @@ const screenController = (() => {
 	function resetGame(mode) {
 		playMode = mode;
 		setGameText();
-		game.resetGame();
+		gameController.resetGame();
 		boardDisplay.addEventListener("click", handleGameClick);
 		updateDisplay();
 	}
@@ -356,7 +357,6 @@ const screenController = (() => {
 	}
 
 	function startGame(e) {
-		game = gameController(e.target.id);
 		resetGame(e.target.id);
 		homeScreen.classList = "up-north";
 		resetBtn.addEventListener("click", () => {
