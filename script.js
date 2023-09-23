@@ -1,4 +1,4 @@
-function gameBoard() {
+const gameBoard = (() => {
 	// Generate a 3x3 grid.
 	const grid = [];
 	for (let i = 0; i < 3; i++) {
@@ -15,7 +15,7 @@ function gameBoard() {
 			value = player;
 			return true;
 		};
-		return { getValue, setValue }
+		return { getValue, setValue };
 	}
 
 	const getGrid = () => grid;
@@ -28,19 +28,19 @@ function gameBoard() {
 
 	// Console version: Printing the grid
 	function getGridValues() {
-		return grid.map(row => row.map(square => square.getValue()));
+		return grid.map((row) => row.map((square) => square.getValue()));
 	}
 
 	function resetGame() {
-		grid.forEach(row => {
-			row.forEach(square => {
-				square.setValue(0)
-			})
-		})
+		grid.forEach((row) => {
+			row.forEach((square) => {
+				square.setValue(0);
+			});
+		});
 	}
 
-	return { markSquare, getGrid, getGridValues, resetGame }
-}
+	return { markSquare, getGrid, getGridValues, resetGame };
+})();
 
 function gameController(mode) {
 	const PlayerFactory = (number) => {
@@ -48,8 +48,8 @@ function gameController(mode) {
 		const marker = number;
 		const getName = () => name;
 		const getMarker = () => marker;
-		return { getName, getMarker }
-	}
+		return { getName, getMarker };
+	};
 
 	const player1 = PlayerFactory(1);
 	const player2 = PlayerFactory(2);
@@ -62,12 +62,9 @@ function gameController(mode) {
 	}
 
 	function printNextRound() {
-		console.log(board.getGridValues());
-		console.log(`${currentPlayer.getName()}'s turn...`)
-
+		console.log(gameBoard.getGridValues());
+		console.log(`${currentPlayer.getName()}'s turn...`);
 	}
-
-	const board = gameBoard();
 
 	function playRound(inputRow, inputColumn) {
 		console.log(
@@ -75,13 +72,19 @@ function gameController(mode) {
 		);
 
 		// Mark a square on the board, checking if the position is open.
-		const positionOpen = board.markSquare(inputRow, inputColumn, currentPlayer.getMarker());
+		const positionOpen = gameBoard.markSquare(
+			inputRow,
+			inputColumn,
+			currentPlayer.getMarker()
+		);
 		if (!positionOpen) {
-			console.log(`!!! Position already taken, try again ${currentPlayer.getName()} !!!`);
+			console.log(
+				`!!! Position already taken, try again ${currentPlayer.getName()} !!!`
+			);
 			return printNextRound();
 		}
 
-		const grid = board.getGridValues();
+		const grid = gameBoard.getGridValues();
 
 		// Check for a winner
 		function checkGameOver() {
@@ -91,53 +94,63 @@ function gameController(mode) {
 					// Find first token
 					if (grid[y][x] === currentPlayer.getMarker()) {
 						// Check wins: horizontal, vertical, diagonal right, diagonal left
-						if (y === 0 && x === 0 &&
+						if (
+							y === 0 &&
+							x === 0 &&
 							grid[y][x] === grid[y + 1][x + 1] &&
-							grid[y][x] === grid[y + 2][x + 2]) {
+							grid[y][x] === grid[y + 2][x + 2]
+						) {
 							return {
 								type: "Win",
 								winPattern: "diagonally, top L to bottom R",
 								squares: {
 									start: { y, x },
 									middle: { y: y + 1, x: x + 1 },
-									end: { y: y + 2, x: x + 2 }
-								}
+									end: { y: y + 2, x: x + 2 },
+								},
 							};
-						} else if (y === 0 && x === 2 &&
+						} else if (
+							y === 0 &&
+							x === 2 &&
 							grid[y][x] === grid[y + 1][x - 1] &&
-							grid[y][x] === grid[y + 2][x - 2]) {
+							grid[y][x] === grid[y + 2][x - 2]
+						) {
 							return {
 								type: "Win",
 								winPattern: "diagonally, top R to bottom L",
 								squares: {
 									start: { y, x },
 									middle: { y: y + 1, x: x - 1 },
-									end: { y: y + 2, x: x - 2 }
-								}
+									end: { y: y + 2, x: x - 2 },
+								},
 							};
-						} else if (y === 0 &&
+						} else if (
+							y === 0 &&
 							grid[y][x] === grid[y + 1][x] &&
-							grid[y][x] === grid[y + 2][x]) {
+							grid[y][x] === grid[y + 2][x]
+						) {
 							return {
 								type: "Win",
 								winPattern: "vertically",
 								squares: {
 									start: { y, x },
 									middle: { y: y + 1, x },
-									end: { y: y + 2, x }
-								}
+									end: { y: y + 2, x },
+								},
 							};
-						} else if (x === 0 &&
+						} else if (
+							x === 0 &&
 							grid[y][x] === grid[y][x + 1] &&
-							grid[y][x] === grid[y][x + 2]) {
+							grid[y][x] === grid[y][x + 2]
+						) {
 							return {
 								type: "Win",
 								winPattern: "horizontally",
 								squares: {
 									start: { y, x },
 									middle: { y, x: x + 1 },
-									end: { y, x: x + 2 }
-								}
+									end: { y, x: x + 2 },
+								},
 							};
 						}
 					}
@@ -145,21 +158,27 @@ function gameController(mode) {
 			}
 
 			// 	Tie = full board
-			if (!grid.some(row => row.some(square => square === 0))) {
+			if (!grid.some((row) => row.some((square) => square === 0))) {
 				console.log("Tie");
-				return { type: "tie" }
+				return { type: "tie" };
 			} else return;
 		}
 
 		function endGame(gameDetails) {
-			console.log(board.getGridValues());
+			console.log(gameBoard.getGridValues());
 			console.log(
-				`Game Over: ${gameDetails.type === "tie" ? "Tie" : `${currentPlayer.getName()} wins ${gameDetails.winPattern}`}.`
+				`Game Over: ${
+					gameDetails.type === "tie"
+						? "Tie"
+						: `${currentPlayer.getName()} wins ${
+								gameDetails.winPattern
+						  }`
+				}.`
 			);
 		}
 
 		// Check whether to play next round
-		const gameDetails = checkGameOver()
+		const gameDetails = checkGameOver();
 
 		if (!!gameDetails) {
 			endGame(gameDetails);
@@ -178,21 +197,28 @@ function gameController(mode) {
 		let openPositions = [];
 		for (let y = 0; y < 3; y++) {
 			for (let x = 0; x < 3; x++) {
-				if (board.getGridValues()[y][x] === 0) openPositions.push([y, x]);
+				if (gameBoard.getGridValues()[y][x] === 0)
+					openPositions.push([y, x]);
 			}
 		}
 		console.log(openPositions);
-		return openPositions[Math.floor(Math.random() * openPositions.length)]
+		return openPositions[Math.floor(Math.random() * openPositions.length)];
 	}
 
 	function resetGame() {
 		currentPlayer = player1;
-		board.resetGame();
+		gameBoard.resetGame();
 		console.log("---------- \n New Game \n----------");
 		printNextRound();
 	}
 
-	return { playRound, getGrid: board.getGrid, getCurrentPlayer, resetGame, getComputerChoice }
+	return {
+		playRound,
+		getGrid: gameBoard.getGrid,
+		getCurrentPlayer,
+		resetGame,
+		getComputerChoice,
+	};
 }
 
 const screenController = (() => {
@@ -213,8 +239,9 @@ const screenController = (() => {
 	function updateDisplay() {
 		// Update player turn based on marker
 		const currentPlayer = game.getCurrentPlayer().getMarker();
-		currentPlayerDisplay.classList = `current-player ${currentPlayer === 1 ? "x-char" : "o-char"}`;
-
+		currentPlayerDisplay.classList = `current-player ${
+			currentPlayer === 1 ? "x-char" : "o-char"
+		}`;
 
 		// Clear and get the latest game board.
 		boardDisplay.textContent = "";
@@ -233,7 +260,9 @@ const screenController = (() => {
 				squareBtn.dataset.row = y;
 
 				let marker = square.getValue();
-				squareBtn.classList = `square ${marker === 0 ? "" : marker === 1 ? "x-char" : "o-char"}`;
+				squareBtn.classList = `square ${
+					marker === 0 ? "" : marker === 1 ? "x-char" : "o-char"
+				}`;
 				boardDisplay.appendChild(sqrContainer);
 				sqrContainer.appendChild(squareBtn);
 			});
@@ -243,25 +272,30 @@ const screenController = (() => {
 	function endGameDisplay(gameDetails) {
 		if (gameDetails.type === "tie") {
 			currentPlayerDisplay.classList = "current-player outcome";
-			currentPlayerDisplay.textContent = "It's a tie!"
+			currentPlayerDisplay.textContent = "It's a tie!";
 		} else {
-			currentPlayerDisplay.textContent = "wins!"
+			currentPlayerDisplay.textContent = "wins!";
 			currentPlayerDisplay.classList.add("outcome");
 			const squares = gameDetails.squares;
 			for (const pair in squares) {
-				Array.from(boardDisplay.children).find(container => {
-					return (+container.firstElementChild.dataset.row === squares[pair].y) &&
-						(+container.firstElementChild.dataset.column === squares[pair].x)
-				}).classList.add("winner");
+				Array.from(boardDisplay.children)
+					.find((container) => {
+						return (
+							+container.firstElementChild.dataset.row ===
+								squares[pair].y &&
+							+container.firstElementChild.dataset.column ===
+								squares[pair].x
+						);
+					})
+					.classList.add("winner");
 			}
 		}
 
-		gameText.forEach(el => {
+		gameText.forEach((el) => {
 			el.classList.toggle("hidden");
-		})
+		});
 
-		boardDisplay.removeEventListener("click", handleGameClick)
-
+		boardDisplay.removeEventListener("click", handleGameClick);
 	}
 
 	function handleGameClick(e) {
@@ -271,8 +305,11 @@ const screenController = (() => {
 		playRound(inputRow, inputColumn);
 
 		// Check for computer turn
-		if ((playMode === "single") && (game.getCurrentPlayer().getMarker() === 2)) {
-			boardDisplay.removeEventListener("click", handleGameClick)
+		if (
+			playMode === "single" &&
+			game.getCurrentPlayer().getMarker() === 2
+		) {
+			boardDisplay.removeEventListener("click", handleGameClick);
 			const computerChoice = game.getComputerChoice();
 			setTimeout(() => {
 				playRound(computerChoice[0], computerChoice[1]);
@@ -282,17 +319,17 @@ const screenController = (() => {
 
 	function playRound(row, column) {
 		const gameDetails = game.playRound(row, column).getGameDetails();
-		updateDisplay()
+		updateDisplay();
 		if (!!gameDetails) {
 			endGameDisplay(gameDetails);
-		} else boardDisplay.addEventListener("click", handleGameClick)
+		} else boardDisplay.addEventListener("click", handleGameClick);
 	}
 
 	function resetGame(mode) {
 		playMode = mode;
-		setGameText()
-		game.resetGame()
-		boardDisplay.addEventListener("click", handleGameClick)
+		setGameText();
+		game.resetGame();
+		boardDisplay.addEventListener("click", handleGameClick);
 		updateDisplay();
 	}
 
@@ -303,15 +340,15 @@ const screenController = (() => {
 		if (!gameText[1].classList.value.includes("hidden")) {
 			gameText[1].classList.add("hidden");
 		}
-		currentPlayerDisplay.textContent = "'s turn."
+		currentPlayerDisplay.textContent = "'s turn.";
 	}
 
 	function goToHomeScreen() {
 		homeScreen.classList = "";
-		startBtns.forEach(button => {
-			button.addEventListener("click", startGame)
-		})
-		boardDisplay.removeEventListener("click", handleGameClick)
+		startBtns.forEach((button) => {
+			button.addEventListener("click", startGame);
+		});
+		boardDisplay.removeEventListener("click", handleGameClick);
 		resetBtn.removeEventListener("click", resetGame);
 		homeBtn.removeEventListener("click", goToHomeScreen);
 	}
@@ -321,20 +358,20 @@ const screenController = (() => {
 		resetGame(e.target.id);
 		homeScreen.classList = "up-north";
 		resetBtn.addEventListener("click", () => {
-			resetScreen.forEach(el => {
+			resetScreen.forEach((el) => {
 				el.classList.remove("shrunk");
-			})
+			});
 			setTimeout(() => {
-				resetGame(playMode)
-				resetScreen.forEach(el => {
+				resetGame(playMode);
+				resetScreen.forEach((el) => {
 					el.classList.add("shrunk");
-				})
+				});
 			}, 900);
 		});
 		homeBtn.addEventListener("click", goToHomeScreen);
-		startBtns.forEach(button => {
-			button.removeEventListener("click", startGame)
-		})
+		startBtns.forEach((button) => {
+			button.removeEventListener("click", startGame);
+		});
 	}
 
 	goToHomeScreen();
