@@ -81,7 +81,9 @@ function gameController(mode) {
 			console.log(
 				`!!! Position already taken, try again ${currentPlayer.getName()} !!!`
 			);
-			return printNextRound();
+			printNextRound();
+			const getGameDetails = () => undefined;
+			return { getGameDetails };
 		}
 
 		const grid = gameBoard.getGridValues();
